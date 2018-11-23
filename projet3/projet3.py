@@ -113,9 +113,9 @@ with open(sys.argv[1]) as f:
     plateau = [[elem for elem in line] for line in f]  # fait une matrice du fichier texte
     plateau[y][x] = agent
     print_plateau()
+    print()
     pos_agent = (x, y, agent)
     while play:
-        print()
         if pos_agent == (len(plateau[0]) - 3, len(plateau) - 1, agent):
             print(MSG_SORTIE)
             visited_pos.append(pos_agent)
@@ -135,6 +135,7 @@ with open(sys.argv[1]) as f:
                 visited_pos.append(pos_agent)
                 forward(plateau)
                 print_plateau()
+                print()
             elif wall_right(agent, plateau, y, x) and wall_forward(agent, plateau, y, x):
                 turn_left()
             else:
@@ -142,11 +143,13 @@ with open(sys.argv[1]) as f:
                 turn_right()
                 forward(plateau)
                 print_plateau()
+                print()
         elif sys.argv[2] == "g":
             if wall_left(agent, plateau, y, x) and not wall_forward(agent, plateau, y, x):
                 visited_pos.append(pos_agent)
                 forward(plateau)
                 print_plateau()
+                print()
             elif wall_left(agent, plateau, y, x) and wall_forward(agent, plateau, y, x):
                 turn_right()
             else:
@@ -154,7 +157,9 @@ with open(sys.argv[1]) as f:
                 turn_left()
                 forward(plateau)
                 print_plateau()
+                print()
         counter += 1
+        #time.sleep(1)
 
     # Transforme les tuples dans la liste visited_pos en liste
     i = 0
@@ -174,11 +179,22 @@ with open(sys.argv[1]) as f:
     turtle.up()
     turtle.color("red")
     turtle.width(3)
-    turtle.right(90)
     turtle.tracer(1, 40)
+    turtle.setheading(270)
     # Affiche le trajet de l'agent
-    for i in range(0, len(visited_pos1)):
+    for i in range(0, len(visited_pos1) - 1):
         turtle.goto(visited_pos1[i][1] * 30 + 15, visited_pos1[i][0] * (-30) - 15)
         turtle.down()
+        if visited_pos[i][0] < visited_pos[i + 1][0]:
+            turtle.setheading(0)
+        if visited_pos[i][0] > visited_pos[i + 1][0]:
+            turtle.setheading(180)
+        if visited_pos[i][1] < visited_pos[i + 1][1]:
+            turtle.setheading(270)
+        if visited_pos[i][1] > visited_pos[i + 1][1]:
+            turtle.setheading(90)
+    l = len(visited_pos)
+    turtle.goto(visited_pos1[l - 1][1] * 30 + 15, visited_pos1[l - 1][0] * (-30) - 15)
+
 
     turtle.exitonclick()
